@@ -30,10 +30,7 @@ CAMERA_INDEX         = 0
 CHECK_INTERVAL_MS    = 30
 MODEL_PATH           = "gesture_recognizer.task"
 MODEL_URL            = "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task"
-# ─────────────────────────────────────────
 
-
-# ── Global state ──────────────────────────
 is_running        = True
 screen_locked     = False
 lock_armed        = False
@@ -43,7 +40,7 @@ tray_icon_ref     = None
 
 # Shared camera reference so lock_windows() can release it instantly
 _cap_lock         = threading.Lock()
-_cap              = None          # The cv2.VideoCapture object
+_cap              = None          
 
 
 def get_cap():
@@ -64,7 +61,7 @@ def release_cap():
             _cap = None
 
 
-# ── Lock with camera release first ────────
+# lock camera release
 
 def lock_windows():
     """Release camera first, then lock — ensures webcam light is OFF on lock screen."""
@@ -73,7 +70,7 @@ def lock_windows():
     ctypes.windll.user32.LockWorkStation()
 
 
-# ── Session watcher (lock / unlock events) ─
+# session watcher if it is unlocked or locked
 
 WTS_SESSION_LOCK   = 0x7
 WTS_SESSION_UNLOCK = 0x8
@@ -179,15 +176,14 @@ def download_model():
         print("Model downloaded.")
 
 
-# ── Landmark fallback ─────────────────────
-
+# ── Landmark fallback
 def finger_extended_score(lm):
     fingers  = [(8,6),(12,10),(16,14),(20,18)]
     extended = sum(1 for tip, pip in fingers if lm[tip].y < lm[pip].y)
     return extended / 4.0
 
 
-# ── Open camera ───────────────────────────
+# open camera
 
 def open_camera_fresh():
     """Try to open the webcam, retry up to 10 times (handles post-unlock delay)."""
@@ -228,7 +224,7 @@ def process_gesture(gesture_name):
             status_text = "Watching..."
 
 
-# ── Detection loop ────────────────────────
+# detect loop function
 
 def detection_loop():
     global is_running, lock_armed, fist_start, status_text
@@ -415,7 +411,7 @@ def build_tray():
     return icon
 
 
-# ── Entry point ───────────────────────────
+# entry point
 
 if __name__ == "__main__":
     threading.Thread(target=start_session_watcher, daemon=True).start()
