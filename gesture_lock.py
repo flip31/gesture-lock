@@ -1,11 +1,3 @@
-"""
-GestureLock - Lock your Windows PC with a hand gesture
-Show your open palm, then close it into a fist to lock.
-Runs silently in the background with a system tray icon.
-
-v5 — Camera released BEFORE lock call so Windows Hello face unlock works
-     Session watcher resumes camera after sign-in
-"""
 
 import cv2
 import ctypes
@@ -21,19 +13,13 @@ from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python.vision import GestureRecognizer, GestureRecognizerOptions, RunningMode
 import urllib.request
 
-
-# ─────────────────────────────────────────
-#  SETTINGS
-# ─────────────────────────────────────────
 GESTURE_HOLD_SECONDS = 1.0
 CAMERA_INDEX         = 0
 CHECK_INTERVAL_MS    = 30
 MODEL_PATH           = "gesture_recognizer.task"
 MODEL_URL            = "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task"
-# ─────────────────────────────────────────
 
-
-# ── Global state ──────────────────────────
+# Global state
 is_running        = True
 screen_locked     = False
 lock_armed        = False
@@ -361,7 +347,7 @@ def detection_loop_legacy():
     release_cap()
 
 
-# ── System tray ───────────────────────────
+# System tray 
 
 def create_tray_image(color="green"):
     size  = 64
